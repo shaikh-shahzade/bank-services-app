@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: "configserver"
   profiles:
     active: git
   cloud:
@@ -6,16 +8,11 @@ spring:
       server:
         git:
           uri: "https://github.com/shaikh-shahzade/Config-Repo.git"
-          clone-on-start: true
           default-label: main
-          force-pull: true
           timeout: 5
+          clone-on-start: true
+          force-pull: true
 
-  rabbitmq:
-      host: "localhost"
-      port: 5672
-      username: "guest"
-      password: "guest"
 management:
   endpoints:
     web:
@@ -30,4 +27,9 @@ management:
     health:
       probes:
         enabled: true
-    
+
+encrypt:
+  key: "45D81EC1EF61DF9AD8D3E5BB397F9"
+
+server:
+  port: 8071
