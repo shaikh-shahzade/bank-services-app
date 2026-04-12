@@ -3,6 +3,7 @@ package com.demo.accounts.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.accounts.constants.AccountsConstants;
+import com.demo.accounts.dto.AccountsDto;
 import com.demo.accounts.dto.CustomerDto;
 import com.demo.accounts.dto.ErrorResponseDto;
 import com.demo.accounts.dto.ResponseDto;
@@ -18,6 +19,9 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import jakarta.validation.constraints.Pattern;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,11 +45,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 @RestController
 @RequestMapping(path="/api", produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
+
 @Validated
 public class AccountsController {
 
+@Autowired
     private IAccountsService iAccountsService;
+
+    @Value("${build.version}")
+    private String buildVersion;
+
 
     @Operation(
             summary = "Create Account REST API",
@@ -173,5 +182,29 @@ public class AccountsController {
         }
     }
 
+    @Operation(
+            summary = "Get Build information",
+            description = "Get Build information that is deployed into accounts microservice"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildInfo() {
+        return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(buildVersion);
+    }
 
 }

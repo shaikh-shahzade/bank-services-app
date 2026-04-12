@@ -1,6 +1,7 @@
 package com.demo.loans.controller;
 
 import com.demo.loans.constants.LoansConstants;
+import com.demo.loans.dto.AccountsContactInfoDto;
 import com.demo.loans.dto.ErrorResponseDto;
 import com.demo.loans.dto.LoansDto;
 import com.demo.loans.dto.ResponseDto;
@@ -14,11 +15,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 
 /**
  * @author Shaikh Shahzade
@@ -30,11 +37,17 @@ import org.springframework.web.bind.annotation.*;
 )
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
 @Validated
 public class LoansController {
 
+    @Autowired
     private ILoansService iLoansService;
+
+    @Autowired
+    private AccountsContactInfoDto accountsConfigDto;
+
+    @Value("${build.version}")
+    private String buildVersion;
 
     @Operation(
             summary = "Create Loan REST API",
@@ -61,7 +74,7 @@ public class LoansController {
         iLoansService.createLoan(mobileNumber);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new ResponseDto(LoansConstants.STATUS_201, LoansConstants.MESSAGE_201));
+                .body(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_201));
     }
 
     @Operation(
@@ -163,5 +176,18 @@ public class LoansController {
                     .body(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_417_DELETE));
         }
     }
+
+    @GetMapping("contact-info")
+    public Map<String, String> getProperty() {
+        return accountsConfigDto.getContactDetails();
+    }
+    
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildInfo() {
+        return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(buildVersion);
+    }
+
 
 }
