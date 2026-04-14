@@ -1,0 +1,16 @@
+server: 
+  port: 8070 
+
+spring: 
+  application: 
+    name: eureka-server 
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+eureka: 
+  instance: 
+    hostname: localhost 
+  client: 
+    register-with-eureka: false   # Don't register itself 
+    fetch-registry: false         # Don't fetch registry 
+    service-url: 
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
