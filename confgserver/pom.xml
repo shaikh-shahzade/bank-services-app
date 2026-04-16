@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.demo</groupId>
-	<artifactId>confgserver</artifactId>
+	<artifactId>configserver</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>confgserver</name>
 	<description>confg server for microservices</description>
@@ -69,7 +69,7 @@
 				<version>3.5.1</version>
 				<configuration>
 					<to>
-						<image>shahzade/${project.artifactId}:s7</image>
+						<image>shahzade/${project.artifactId}:v1</image>
 					</to>
 				</configuration>
 			</plugin>
