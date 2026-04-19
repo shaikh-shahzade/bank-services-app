@@ -14,6 +14,14 @@ spring:
             locator:
               enabled: false
               lowerCaseServiceId: true
+          httpclient:
+            connect-timeout: 1000
+            response-timeout: 5s
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: "http://localhost:7080/realms/master/protocol/openid-connect/certs"
 eureka: 
   instance: 
     prefer-ip-address: true 
@@ -33,10 +41,26 @@ management:
   info:
     env:
       enabled: true
-
+  metrics:
+    tags:
+      application: ${spring.application.name}
+logging:
+  level:
+    com:
+      demo:
+        gatewayserver: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
 info:
   app:
     name: "gatewayserver"
     description: "Gateway Server Application"
     version: "1.0.0"
 
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000
